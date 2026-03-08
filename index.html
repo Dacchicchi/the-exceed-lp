@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE EXCEED | 究極のパーソナルトレーニング</title>
+
+    <!-- Google Fonts: Roboto & Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;900&family=Roboto:wght@400;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        richBlack: '#1A1A1A',
+                        pureWhite: '#FFFFFF',
+                        grayDark: '#2A2A2A',
+                        grayLight: '#888888'
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', '"Noto Sans JP"', 'sans-serif'],
+                    },
+                    fontWeight: {
+                        regular: 400,
+                        black: 900,
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styles */
+        body {
+            background-color: #1A1A1A;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        /* Gold Gradient Definitions */
+        :root {
+            --gold-grad: linear-gradient(135deg, #F9DF9F 0%, #D4AF37 50%, #A67C00 100%);
+            --gold-grad-dim: linear-gradient(135deg, rgba(249, 223, 159, 0.3) 0%, rgba(212, 175, 55, 0.3) 50%, rgba(166, 124, 0, 0.3) 100%);
+            --red-grad: linear-gradient(135deg, #FF7E7E 0%, #E53935 50%, #B71C1C 100%);
+        }
+
+        .text-gold-gradient {
+            background: var(--gold-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hover-text-gold-gradient:hover {
+            background: var(--gold-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bg-gold-gradient {
+            background: var(--gold-grad);
+            color: #1A1A1A;
+            /* Text inside gold background */
+        }
+
+        /* Micro-interactions: Fade Up Animation */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* CTA Button Hover Effect */
+        .btn-cta {
+            background: var(--red-grad);
+            background-size: 200% auto;
+            color: #FFFFFF;
+            /* 赤背景に映える白に変更 */
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border: none;
+        }
+
+        .btn-cta:hover {
+            background-position: right center;
+            /* Gradient moves on hover */
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(229, 57, 53, 0.4);
+            /* シャドウも赤系に変更 */
+        }
+
+        /* Shine Effect for Badges */
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 4s infinite;
+            z-index: 10;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            20% {
+                left: 200%;
+            }
+
+            100% {
+                left: 200%;
+            }
+        }
+
+        /* Navigation Transition */
+        #navbar {
+            transition: background-color 0.4s ease, padding 0.4s ease;
+        }
+
+        /* Hamburger Menu Animation */
+        .hamburger-line {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .menu-open .line-1 {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu-open .line-2 {
+            opacity: 0;
+        }
+
+        .menu-open .line-3 {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Custom Form Input */
+        .luxury-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #444;
+            color: #FFFFFF;
+            border-radius: 0;
+            padding: 12px 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .luxury-input:focus {
+            outline: none;
+            border-bottom-color: #D4AF37;
+        }
+
+        .luxury-input::placeholder {
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Hero Overlay Gradient */
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(26, 26, 26, 0.3) 0%, rgba(26, 26, 26, 0.8) 100%);
+        }
+
+        /* Gold Outline Card (Using Masking for clean gradient borders) */
+        .gold-border-card {
+            position: relative;
+            background-color: #2A2A2A;
+            z-index: 1;
+        }
+
+        .gold-border-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            /* border width */
+            background: var(--gold-grad-dim);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            transition: background 0.3s ease;
+            z-index: -1;
+        }
+
+        .gold-border-card:hover::before {
+            background: var(--gold-grad);
+        }
+
+        /* Outline Red Button (For Pricing Plan) */
+        .btn-outline-red {
+            position: relative;
+            background: transparent;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .btn-outline-red .btn-text {
+            background: var(--red-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-red::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: var(--red-grad);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        .btn-outline-red::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--red-grad);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -2;
+        }
+
+        .btn-outline-red:hover::after {
+            opacity: 1;
+        }
+
+        .btn-outline-red:hover .btn-text {
+            -webkit-text-fill-color: #FFFFFF;
+            /* Change text color to white on hover */
+        }
+
+        /* FAQ Accordion */
+        details>summary {
+            list-style: none;
+        }
+
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans font-regular relative">
+
+    <!-- SVG Definitions for Gradient Icons -->
+    <svg width="0" height="0" class="absolute pointer-events-none" style="width: 0; height: 0; position: absolute;">
+        <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#F9DF9F" />
+                <stop offset="50%" stop-color="#D4AF37" />
+                <stop offset="100%" stop-color="#A67C00" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Navigation -->
+    <nav id="navbar"
+        class="fixed w-full z-50 top-0 left-0 bg-transparent py-6 px-6 md:px-12 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="text-2xl font-black tracking-widest text-pureWhite relative z-50">
+            THE EXCEED
+        </div>
+
+        <!-- PC Menu -->
+        <div class="hidden md:flex space-x-8 text-sm tracking-widest font-regular items-center">
+            <a href="#concept" class="hover-text-gold-gradient transition-colors duration-300">CONCEPT</a>
+            <a href="#trainers" class="hover-text-gold-gradient transition-colors duration-300">TRAINER</a>
+            <a href="#pricing" class="hover-text-gold-gradient transition-colors duration-300">PLAN</a>
+            <a href="#faq" class="hover-text-gold-gradient transition-colors duration-300">FAQ</a>
+            <a href="#contact" class="btn-cta px-6 py-3 rounded-full text-sm font-black tracking-wider ml-4">
+                無料体験を予約
+            </a>
+        </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button id="menu-btn"
+            class="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none z-50 relative">
+            <span class="hamburger-line line-1 w-7 h-[2px] bg-pureWhite block rounded-sm"></span>
+            <span class="hamburger-line line-2 w-7 h-[2px] bg-pureWhite block rounded-sm"></span>
+            <span class="hamburger-line line-3 w-7 h-[2px] bg-pureWhite block rounded-sm"></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-richBlack/95 backdrop-blur-sm z-40 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="flex flex-col items-center space-y-8 text-xl tracking-widest font-black">
+            <a href="#concept" class="mobile-link text-pureWhite hover-text-gold-gradient transition-colors">CONCEPT</a>
+            <a href="#trainers"
+                class="mobile-link text-pureWhite hover-text-gold-gradient transition-colors">TRAINER</a>
+            <a href="#pricing" class="mobile-link text-pureWhite hover-text-gold-gradient transition-colors">PLAN</a>
+            <a href="#faq" class="mobile-link text-pureWhite hover-text-gold-gradient transition-colors">FAQ</a>
+            <a href="#contact" class="mobile-link btn-cta px-10 py-4 mt-8 rounded-full text-base">無料体験を予約</a>
+        </div>
+    </div>
+
+    <!-- 1. Hero Section -->
+    <header class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 w-full h-full">
+            <picture>
+                <source media="(min-width: 1024px)" srcset="images/hero.png">
+                <img src="images/hero_sp.png" alt="" class="w-full h-full object-cover object-center" />
+            </picture>
+            <div class="absolute inset-0 bg-richBlack opacity-60"></div>
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-4 flex flex-col items-center w-full max-w-5xl fade-up pb-32 lg:pb-40">
+            <h1 class="text-4xl lg:text-6xl font-black leading-tight tracking-tight mb-6">
+                忙しさを、<br class="lg:hidden" />言い訳にしない<br class="lg:hidden" />身体へ。
+            </h1>
+            <p class="text-base lg:text-xl font-regular tracking-widest mb-12 text-gray-300 leading-relaxed">
+                週2回・60分。<br class="lg:hidden" />無駄を削ぎ落とした科学的メソッドが、<br class="hidden lg:block" />最短距離で結果を出す。
+            </p>
+
+            <a href="#contact"
+                class="btn-cta text-lg lg:text-xl font-black py-4 px-12 rounded-full tracking-wider inline-block">
+                無料体験を予約する
+            </a>
+        </div>
+
+        <!-- Achievements Badges (Gold Solid & Shine Effect) -->
+        <div class="absolute bottom-6 lg:bottom-12 left-0 w-full z-20">
+            <div
+                class="flex flex-row justify-center items-stretch gap-3 lg:gap-8 w-full max-w-5xl mx-auto px-4 lg:px-6">
+                <!-- Badge 1 -->
+                <div
+                    class="flex-1 bg-gold-gradient rounded-md lg:rounded-xl py-4 lg:py-8 px-2 lg:px-6 text-center shadow-[0_15px_30px_rgba(212,175,55,0.4)] flex flex-col justify-center items-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(212,175,55,0.6)] shine-effect border border-[#FFF8E1]">
+                    <p class="text-[10px] lg:text-sm tracking-[0.2em] text-[#3E2723] font-bold mb-1 lg:mb-2">累計実績</p>
+                    <p class="text-[#3E2723] font-black text-3xl lg:text-5xl">500<span
+                            class="text-[10px] lg:text-xl ml-0.5 lg:ml-1">名以上</span></p>
+                </div>
+                <!-- Badge 2 -->
+                <div class="flex-1 bg-gold-gradient rounded-md lg:rounded-xl py-4 lg:py-8 px-2 lg:px-6 text-center shadow-[0_15px_30px_rgba(212,175,55,0.4)] flex flex-col justify-center items-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(212,175,55,0.6)] shine-effect border border-[#FFF8E1]"
+                    style="animation-delay: 0.2s;">
+                    <p class="text-[10px] lg:text-sm tracking-[0.2em] text-[#3E2723] font-bold mb-1 lg:mb-2">平均達成</p>
+                    <p class="text-[#3E2723] font-black text-3xl lg:text-5xl">-8<span
+                            class="text-[10px] lg:text-xl ml-0.5 lg:ml-1">kg</span></p>
+                </div>
+                <!-- Badge 3 -->
+                <div class="flex-1 bg-gold-gradient rounded-md lg:rounded-xl py-4 lg:py-8 px-2 lg:px-6 text-center shadow-[0_15px_30px_rgba(212,175,55,0.4)] flex flex-col justify-center items-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(212,175,55,0.6)] shine-effect border border-[#FFF8E1]"
+                    style="animation-delay: 0.4s;">
+                    <p class="text-[10px] lg:text-sm tracking-[0.2em] text-[#3E2723] font-bold mb-1 lg:mb-2">顧客満足度</p>
+                    <p class="text-[#3E2723] font-black text-3xl lg:text-5xl">98<span
+                            class="text-[10px] lg:text-xl ml-0.5 lg:ml-1">%</span></p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Concept & Features -->
+    <section id="concept" class="py-24 lg:py-32 px-6 bg-richBlack">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-20 fade-up">
+                <h2 class="text-gold-gradient text-sm tracking-[0.3em] font-black mb-4">REASON</h2>
+                <h3 class="text-3xl lg:text-4xl font-black tracking-wider">THE EXCEEDが選ばれる3つの理由</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 (Key Icon) -->
+                <div class="gold-border-card p-10 rounded-lg text-center fade-up">
+                    <div
+                        class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full p-[1px] bg-gradient-to-br from-[#F9DF9F] via-[#D4AF37] to-[#A67C00]">
+                        <div class="w-full h-full rounded-full bg-richBlack flex items-center justify-center">
+                            <svg class="w-8 h-8 drop-shadow-lg" style="stroke: url(#goldGrad);" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-black mb-4 tracking-wide">完全個室の<br>ラグジュアリー空間</h4>
+                    <p class="text-base lg:text-sm text-grayLight leading-relaxed font-regular">
+                        都内最大級の広さを誇る完全プライベートルーム。イタリア製最高級マシン「テクノジム」を全室に完備し、他のお客様と一切顔を合わせることなくトレーニングに没頭できます。
+                    </p>
+                </div>
+                <!-- Feature 2 (Beaker/Science Icon) -->
+                <div class="gold-border-card p-10 rounded-lg text-center fade-up" style="transition-delay: 0.1s;">
+                    <div
+                        class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full p-[1px] bg-gradient-to-br from-[#F9DF9F] via-[#D4AF37] to-[#A67C00]">
+                        <div class="w-full h-full rounded-full bg-richBlack flex items-center justify-center">
+                            <svg class="w-8 h-8 drop-shadow-lg" style="stroke: url(#goldGrad);" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-black mb-4 tracking-wide">科学的根拠に基づく<br>メソッド</h4>
+                    <p class="text-base lg:text-sm text-grayLight leading-relaxed font-regular">
+                        初回体験時の高精度InBody測定と3D姿勢分析により、100以上のデータポイントから身体を解析。目標達成率98%を誇る当社独自のアルゴリズムで、最短ルートの専用プログラムを作成します。
+                    </p>
+                </div>
+                <!-- Feature 3 (Badge/Quality Icon) -->
+                <div class="gold-border-card p-10 rounded-lg text-center fade-up" style="transition-delay: 0.2s;">
+                    <div
+                        class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full p-[1px] bg-gradient-to-br from-[#F9DF9F] via-[#D4AF37] to-[#A67C00]">
+                        <div class="w-full h-full rounded-full bg-richBlack flex items-center justify-center">
+                            <svg class="w-8 h-8 drop-shadow-lg" style="stroke: url(#goldGrad);" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-black mb-4 tracking-wide">厳選された<br>トップトレーナー</h4>
+                    <p class="text-base lg:text-sm text-grayLight leading-relaxed font-regular">
+                        採用率わずか3%以下の厳格な基準をクリアし、平均指導歴7年以上・国際認定資格を保有するプロフェッショナルのみが在籍。累計500名以上のボディメイクを成功に導いた実績があります。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interior Image Separator -->
+    <section class="w-full h-[50vh] relative overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070&auto=format&fit=crop" alt=""
+            class="w-full h-full object-cover fixed-bg" style="background-attachment: fixed;" />
+        <div class="absolute inset-0 bg-richBlack opacity-50"></div>
+    </section>
+
+    <!-- 3. Testimonials -->
+    <section class="py-24 md:py-32 px-6 bg-richBlack">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-20 fade-up">
+                <h2 class="text-gold-gradient text-sm tracking-[0.3em] font-black mb-4">VOICE</h2>
+                <h3 class="text-3xl md:text-4xl font-black tracking-wider">お客様の声</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Voice 1 -->
+                <div class="bg-grayDark p-8 rounded-lg fade-up relative">
+                    <div class="text-gold-gradient text-4xl font-black absolute top-4 left-6 opacity-30">"</div>
+                    <p class="text-base md:text-sm text-pureWhite leading-relaxed mb-8 relative z-10 pt-4">
+                        「多忙な毎日で体型が崩れていましたが、週2回のセッションと的確な食事指導で、2ヶ月で-7kgを達成。スーツを綺麗に着こなせるようになり、仕事への自信にも繋がりました。」
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-[#333] rounded-full flex items-center justify-center text-gold-gradient font-black">
+                            A</div>
+                        <div>
+                            <p class="font-black tracking-wide text-sm">Y.S 様 (35歳)</p>
+                            <p class="text-xs text-gold-gradient">IT企業 経営者</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Voice 2 -->
+                <div class="bg-grayDark p-8 rounded-lg fade-up relative" style="transition-delay: 0.1s;">
+                    <div class="text-gold-gradient text-4xl font-black absolute top-4 left-6 opacity-30">"</div>
+                    <p class="text-base md:text-sm text-pureWhite leading-relaxed mb-8 relative z-10 pt-4">
+                        「運動経験がなく不安でしたが、トレーナーの理論的な説明と丁寧なサポートのおかげで楽しく続けられました。姿勢も改善され、肩こりなどの不調も嘘のように消えました。」
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-[#333] rounded-full flex items-center justify-center text-gold-gradient font-black">
+                            B</div>
+                        <div>
+                            <p class="font-black tracking-wide text-sm">M.K 様 (42歳)</p>
+                            <p class="text-xs text-gold-gradient">医師</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Voice 3 -->
+                <div class="bg-grayDark p-8 rounded-lg fade-up relative" style="transition-delay: 0.2s;">
+                    <div class="text-gold-gradient text-4xl font-black absolute top-4 left-6 opacity-30">"</div>
+                    <p class="text-base md:text-sm text-pureWhite leading-relaxed mb-8 relative z-10 pt-4">
+                        「これまで何度もダイエットに挫折してきましたが、ここは違いました。ただ痩せるだけでなく、筋肉をつけて美しいシルエットを作る『ボディメイク』の真髄を教わりました。」
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-[#333] rounded-full flex items-center justify-center text-gold-gradient font-black">
+                            C</div>
+                        <div>
+                            <p class="font-black tracking-wide text-sm">A.T 様 (38歳)</p>
+                            <p class="text-xs text-gold-gradient">弁護士</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Trainers -->
+    <section id="trainers" class="py-24 md:py-32 px-6 bg-[#111111]">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-20 fade-up">
+                <h2 class="text-gold-gradient text-sm tracking-[0.3em] font-black mb-4">TRAINERS</h2>
+                <h3 class="text-3xl md:text-4xl font-black tracking-wider">専属トレーナー</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Trainer 1 -->
+                <div class="fade-up group">
+                    <div class="overflow-hidden rounded-lg mb-6 relative aspect-[3/4]">
+                        <img src="images/trainer_kenji.png" alt=""
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0" />
+                        <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-richBlack to-transparent">
+                            <p class="text-gold-gradient text-xs font-black tracking-[0.2em] mb-1">HEAD TRAINER</p>
+                            <h4 class="text-2xl font-black tracking-widest">KENJI</h4>
+                        </div>
+                    </div>
+                    <p class="text-base md:text-sm text-grayLight leading-relaxed font-regular">
+                        元プロアスリート。運動生理学と栄養学の深い知見に基づく指導で、著名人や経営者のボディメイクを多数担当。結果への圧倒的なコミットメントをお約束します。
+                    </p>
+                </div>
+                <!-- Trainer 2 -->
+                <div class="fade-up group" style="transition-delay: 0.1s;">
+                    <div class="overflow-hidden rounded-lg mb-6 relative aspect-[3/4]">
+                        <img src="images/trainer_yuka.png" alt=""
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0" />
+                        <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-richBlack to-transparent">
+                            <p class="text-gold-gradient text-xs font-black tracking-[0.2em] mb-1">BODY MAKE SPECIALIST
+                            </p>
+                            <h4 class="text-2xl font-black tracking-widest">YUKA</h4>
+                        </div>
+                    </div>
+                    <p class="text-base md:text-sm text-grayLight leading-relaxed font-regular">
+                        美しい曲線美を創るスペシャリスト。機能解剖学を駆使し、姿勢改善からヒップアップまで、女性特有の悩みに寄り添った繊細なアプローチを得意とします。
+                    </p>
+                </div>
+                <!-- Trainer 3 -->
+                <div class="fade-up group" style="transition-delay: 0.2s;">
+                    <div class="overflow-hidden rounded-lg mb-6 relative aspect-[3/4]">
+                        <img src="images/trainer_takuya.png" alt=""
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0" />
+                        <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-richBlack to-transparent">
+                            <p class="text-gold-gradient text-xs font-black tracking-[0.2em] mb-1">STRENGTH COACH</p>
+                            <h4 class="text-2xl font-black tracking-widest">TAKUYA</h4>
+                        </div>
+                    </div>
+                    <p class="text-base md:text-sm text-grayLight leading-relaxed font-regular">
+                        筋力向上のプロフェッショナル。ただ重いものを挙げるだけでなく、正しいフォームで安全かつ効率的に筋肉へ刺激を与える「効かせる」技術に定評があります。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Pricing -->
+    <section id="pricing" class="py-24 md:py-32 px-6 bg-richBlack">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-20 fade-up">
+                <h2 class="text-gold-gradient text-sm tracking-[0.3em] font-black mb-4">PLAN</h2>
+                <h3 class="text-3xl md:text-4xl font-black tracking-wider">料金プラン</h3>
+                <p class="mt-6 text-sm text-grayLight font-regular">入会金：¥55,000 (税込) ※無料体験当日のご入会で半額</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 fade-up">
+                <!-- Premium Plan -->
+                <div class="bg-grayDark p-10 rounded-lg relative overflow-hidden border border-[#333]">
+                    <div
+                        class="absolute top-0 right-0 bg-gold-gradient text-xs font-black py-1 px-8 translate-x-[30%] translate-y-[50%] rotate-45 tracking-widest shadow-lg text-richBlack">
+                        RECOMMEND
+                    </div>
+                    <h4 class="text-2xl font-black mb-2 tracking-widest">PREMIUM</h4>
+                    <p class="text-gold-gradient text-sm mb-6 font-regular">月額制プラン（月8回 / 1回60分）</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-black tracking-tight">¥132,000</span><span
+                            class="text-sm text-grayLight ml-2">/ 月(税込)</span>
+                    </div>
+                    <ul class="space-y-4 text-sm font-regular text-pureWhite mb-10">
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0"
+                                style="stroke: url(#goldGrad);" fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>専属トレーナーのマンツーマン指導</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0"
+                                style="stroke: url(#goldGrad);" fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>毎日のLINE食事指導・管理</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0"
+                                style="stroke: url(#goldGrad);" fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>ウェア・シューズ・タオル無料レンタル</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 shrink-0"
+                                style="stroke: url(#goldGrad);" fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>プロテイン無料提供（セッション後）</li>
+                    </ul>
+                    <a href="#contact"
+                        class="block w-full text-center btn-outline-red py-4 font-black tracking-widest rounded-sm">
+                        <span class="btn-text">このプランで予約</span>
+                    </a>
+                </div>
+
+                <!-- Ticket Plan -->
+                <div class="bg-[#111] p-10 rounded-lg border border-[#333]">
+                    <h4 class="text-2xl font-black mb-2 tracking-widest">TICKET</h4>
+                    <p class="text-grayLight text-sm mb-6 font-regular">都度払いプラン（1回60分）</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-black tracking-tight">¥18,000</span><span
+                            class="text-sm text-grayLight ml-2">/ 回(税込)</span>
+                    </div>
+                    <ul class="space-y-4 text-sm font-regular text-grayLight mb-10">
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-grayLight shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>専属トレーナーのマンツーマン指導</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-[#444] shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>食事指導（オプション対応）</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-grayLight shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>ウェア等無料レンタル</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-[#444] shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>プロテイン提供（別途料金）</li>
+                    </ul>
+                    <a href="#contact"
+                        class="block w-full text-center border border-[#555] text-pureWhite hover:border-pureWhite transition-colors duration-300 py-4 font-black tracking-widest rounded-sm mt-auto">
+                        このプランで予約
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FAQ & Contact -->
+    <section class="py-24 md:py-32 px-6 bg-[#111111]">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-20">
+
+            <!-- FAQ -->
+            <div id="faq" class="w-full md:w-1/2 fade-up">
+                <h2 class="text-gold-gradient text-sm tracking-[0.3em] font-black mb-2">FAQ</h2>
+                <h3 class="text-2xl font-black tracking-wider mb-8">よくあるご質問</h3>
+
+                <div class="space-y-4">
+                    <details class="group border-b border-[#333] pb-4 cursor-pointer">
+                        <summary
+                            class="flex justify-between items-center font-black tracking-wide text-base md:text-sm outline-none">
+                            Q. 運動経験が全くなくても大丈夫ですか？
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    viewBox="0 0 24 24" width="24">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </span>
+                        </summary>
+                        <p class="text-grayLight text-base md:text-sm mt-4 leading-relaxed font-regular">
+                            A. 全く問題ありません。お客様の現在の体力や筋力レベルに合わせて、無理のない範囲からオーダーメイドでメニューを構築しますのでご安心ください。
+                        </p>
+                    </details>
+                    <details class="group border-b border-[#333] pb-4 cursor-pointer">
+                        <summary
+                            class="flex justify-between items-center font-black tracking-wide text-base md:text-sm outline-none">
+                            Q. 食事制限は厳しいですか？
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    viewBox="0 0 24 24" width="24">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </span>
+                        </summary>
+                        <p class="text-grayLight text-base md:text-sm mt-4 leading-relaxed font-regular">
+                            A. 極端な糖質制限などは行いません。ライフスタイルをお伺いした上で、健康的に継続できる「3食しっかり食べる」食事コントロールをご提案します。
+                        </p>
+                    </details>
+                    <details class="group border-b border-[#333] pb-4 cursor-pointer">
+                        <summary
+                            class="flex justify-between items-center font-black tracking-wide text-base md:text-sm outline-none">
+                            Q. 必要な持ち物はありますか？
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    viewBox="0 0 24 24" width="24">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </span>
+                        </summary>
+                        <p class="text-grayLight text-base md:text-sm mt-4 leading-relaxed font-regular">
+                            A. ウェア、シューズ、タオル、ミネラルウォーターなどはすべて当ジムで無料でご用意しております。お仕事帰り等でも手ぶらでお越しいただけます。
+                        </p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div id="contact" class="w-full md:w-1/2 fade-up bg-grayDark p-10 rounded-lg">
+                <h2 class="text-gold-gradient text-sm tracking-[0.3em] font-black mb-2">RESERVATION</h2>
+                <h3 class="text-2xl font-black tracking-wider mb-8">無料体験のご予約</h3>
+
+                <form class="space-y-6 flex flex-col"
+                    onsubmit="event.preventDefault(); alert('ご予約リクエストを送信しました。※デモのため実際には送信されません。');">
+                    <div>
+                        <input type="text" placeholder="お名前 (NAME)" class="luxury-input w-full text-base md:text-sm font-regular"
+                            required>
+                    </div>
+                    <div>
+                        <input type="email" placeholder="メールアドレス (EMAIL)"
+                            class="luxury-input w-full text-base md:text-sm font-regular" required>
+                    </div>
+                    <div>
+                        <input type="tel" placeholder="電話番号 (PHONE)" class="luxury-input w-full text-base md:text-sm font-regular"
+                            required>
+                    </div>
+                    <div>
+                        <select
+                            class="luxury-input w-full text-base md:text-sm font-regular bg-transparent appearance-none cursor-pointer"
+                            required>
+                            <option value="" disabled selected class="text-gray-500">ご希望のコース</option>
+                            <option value="premium" class="text-black">PREMIUM (月額制)</option>
+                            <option value="ticket" class="text-black">TICKET (都度払い)</option>
+                            <option value="undecided" class="text-black">相談して決めたい</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-cta w-full py-4 rounded-sm font-black tracking-widest mt-6">
+                        送信する
+                    </button>
+                    <p class="text-xs text-grayLight text-center mt-4">
+                        ※ご入力いただいた情報はプライバシーポリシーに基づき厳重に管理いたします。
+                    </p>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-richBlack border-t border-[#222] py-12 px-6 text-center">
+        <div class="text-2xl font-black tracking-widest text-pureWhite mb-6">
+            THE EXCEED
+        </div>
+        <p class="text-xs text-grayLight font-regular mb-8">〒106-0032 東京都港区六本木X-X-X THE EXCEED TOWER 1F</p>
+        <div class="flex justify-center space-x-6 text-sm text-grayLight mb-8">
+            <a href="#" class="hover-text-gold-gradient transition-colors">運営会社</a>
+            <a href="#" class="hover-text-gold-gradient transition-colors">利用規約</a>
+            <a href="#" class="hover-text-gold-gradient transition-colors">プライバシーポリシー</a>
+        </div>
+        <p class="text-[10px] text-[#555] tracking-widest">&copy; 2024 THE EXCEED All Rights Reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Navbar Scroll Effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-richBlack', 'shadow-lg', 'py-4');
+                    navbar.classList.remove('bg-transparent', 'py-6');
+                } else {
+                    navbar.classList.add('bg-transparent', 'py-6');
+                    navbar.classList.remove('bg-richBlack', 'shadow-lg', 'py-4');
+                }
+            });
+
+            // 2. Intersection Observer for Fade Up Animation
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // アニメーションが完了したら監視を解除してパフォーマンスを向上
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const fadeUpElements = document.querySelectorAll('.fade-up');
+            fadeUpElements.forEach(el => observer.observe(el));
+
+            // 3. Hamburger Menu Toggle
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                menuBtn.classList.toggle('menu-open');
+
+                if (mobileMenu.classList.contains('opacity-0')) {
+                    // Open menu
+                    mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                    mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                } else {
+                    // Close menu
+                    mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                    mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                    document.body.style.overflow = ''; // Restore background scrolling
+                }
+            }
+
+            menuBtn.addEventListener('click', toggleMenu);
+
+            // Close menu when a link is clicked
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+        });
+    </script>
+</body>
+
+</html>
